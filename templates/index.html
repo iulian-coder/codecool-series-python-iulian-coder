@@ -29,6 +29,9 @@
     <!-- page specific styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style/detailed-view.css') }}">
 
+    <!-- page javascript -->
+    <script src="/static/javascript/sorttable.js" type="text/javascript"></script>
+
 </head>
 
 <body>
@@ -56,17 +59,57 @@
             </p>
         </div>
         <div class="card">
-            <ul>
+            <table class="sortable">
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Release Year</th>
+                    <th>Runtime</th>
+                    <th>First Genre</th>
+                    <th>Rating</th>
+                    <th>Trailer & Homepage</th>
+                </tr>
+                </thead>
+                <tbody>
                 {% for show in shows %}
-                    <li>
-                        <a href="{{ '/tv-show/' + (show['id'] | string) }}">{{ show['title'] }}</a>
-                    </li>
+                    <tr>
+                        <td><a href="{{ '/tv-show/' + (show['id'] | string) }}">{{ show['title'] }}</a></td>
+                        <td>{{ show['year'] }}</td>
+                        <td>{{ show['runtime'] }} {{ "minutes" }}</td>
+                        <td>{{ "deFacut" }}</td>
+                        <td>{{ "%.2f"|format(show['rating'] |float) }}</td>
+                        <td><a href="{{ show['trailer'] }}">Trailer</a> - <a href="{{ show['homepage'] }}">Homepage</a>
+                        </td>
+                    </tr>
                 {% endfor %}
-            </ul>
+                </tbody>
+            </table>
+        </div>
+        {#        <div class="card">#}
+        {#            <ul>#}
+        {#                {% for show in shows %}#}
+        {#                    <li>#}
+        {#                        <a href="{{ '/tv-show/' + (show['id'] | string) }}">{{ show['title'] }}</a>#}
+        {#                    </li>#}
+        {#                {% endfor %}#}
+        {#            </ul>#}
+        {#        </div>#}
+        <div class="pagination">
+            {% if (page - 1) < 0 %}
+            {% else %}
+            <a href="{{ page - 1 }}">&laquo;</a>
+            {% endif %}
+            <a href="{{ page }}">{{ page }}</a>
+            <a href="{{ page + 1 }}">{{ page + 1 }}</a>
+            <a href="{{ page + 2 }}">{{ page + 2 }}</a>
+            <a href="{{ page + 3 }}">{{ page + 3 }}</a>
+            <a href="{{ page + 4 }}">{{ page + 4 }}</a>
+            <a href="{{ page + 5 }}">{{ page + 5 }}</a>
+            <a href="{{ page + 6 }}">&raquo;</a>
         </div>
     </section>
     <footer>
-        Copyright, bla-bla
+        Copyright, Bucharest 2020
     </footer>
 </div>
 <div class="background">
