@@ -76,7 +76,7 @@
                         <td><a href="{{ '/tv-show/' + (show['id'] | string) }}">{{ show['title'] }}</a></td>
                         <td>{{ show['year'] }}</td>
                         <td>{{ show['runtime'] }} {{ "minutes" }}</td>
-                        <td>{{ "deFacut" }}</td>
+                        <td>{{ show['first_value'] }}</td>
                         <td>{{ "%.2f"|format(show['rating'] |float) }}</td>
                         <td><a href="{{ show['trailer'] }}">Trailer</a> - <a href="{{ show['homepage'] }}">Homepage</a>
                         </td>

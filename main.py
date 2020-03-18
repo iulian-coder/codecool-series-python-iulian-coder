@@ -7,9 +7,13 @@ app = Flask('codecool_series')
 @app.route('/', defaults={'page': 0})
 @app.route('/<page>')
 def index(page):
-    shows = queries.get_shows(page)
-    # pagination = queries.get_pagination()
-    return render_template('index.html', shows=shows , page=int(page))
+    try:
+        page_number = int(page)
+    except:
+        page_number = 0
+    shows = queries.get_shows(page_number)
+    # print(shows)
+    return render_template('index.html', shows=shows , page=page_number)
 
 
 @app.route('/design')
@@ -19,6 +23,7 @@ def design():
 @app.route('/tv-show/<show_id>')
 def view_show(show_id):
     data = queries.tv_show(show_id)
+    print(data)
     if data[0]['trailer']:
         trailer = data[0]['trailer'].replace('watch?v=', 'embed/', 1)
     else:
