@@ -7,9 +7,8 @@ for (episod of buttonFavorit) {
 
 function addFavoriteEpisode(event) {
     // console.log(event)
-    let userId = event.target.attributes[2].value;
     let episodeId = event.target.id;
-    let data = {userId, episodeId};
+    let data = {episodeId};
     const option = {
         method: 'POST',
         headers: {

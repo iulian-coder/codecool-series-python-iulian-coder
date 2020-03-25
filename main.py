@@ -108,9 +108,9 @@ def account_logout():
 
 @app.route('/api/add-favorite', methods=['POST'])
 def add_favorite():
-    user_id = request.json['userId']
+    user_id = session['user_id'] if is_user_in() else None
     episode_id = request.json['episodeId']
-    queries.add_favorite_episod(user_id,episode_id)
+    queries.add_favourite_episodes(user_id,episode_id)
 
 
 @app.route('/favourite')
