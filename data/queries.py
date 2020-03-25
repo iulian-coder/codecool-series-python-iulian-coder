@@ -108,3 +108,10 @@ def get_favourite(user_id):
         WHERE users.id = {user_id}
 ;''')
     return data
+
+def check_favourite(user_id, episode_id):
+    data=data_manager.execute_select(
+        f''' SELECT * FROM favourites WHERE user_id = {user_id} AND episodes_id = {episode_id}
+;'''
+    )
+    return data

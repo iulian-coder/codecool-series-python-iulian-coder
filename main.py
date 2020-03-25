@@ -110,8 +110,13 @@ def account_logout():
 def add_favorite():
     user_id = session['user_id'] if is_user_in() else None
     episode_id = request.json['episodeId']
-    queries.add_favourite_episodes(user_id,episode_id)
-
+    fav_check = queries.check_favourite(user_id,episode_id)
+    if not fav_check:
+        queries.add_favourite_episodes(user_id,episode_id)
+        answer = 'Episode add to favorite'
+    else:
+        answer = 'Episode is already in favorite'
+    return jsonify(answer)
 
 @app.route('/favourite')
 def favourite_page():
@@ -119,6 +124,11 @@ def favourite_page():
     data = queries.get_favourite(data_user)
     return render_template('favourite.html', data=data)
 
+
+@app.route('/test')
+def check_favorite():
+    data = queries.check_favourite()
+    return render_template('test.html', data = data)
 
 def is_user_in():
     if 'logged_in' in session:

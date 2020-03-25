@@ -6,7 +6,7 @@ for (show of actorsOfShow) {
 }
 
 function handleShowClick(event) {
-    console.log(event.target.id);
+    // console.log(event.target.id);
     let showId = event.target.id;
     fetch(`http://127.0.0.1:5000/api/show-actors/${showId}`)
         .then((response) => {

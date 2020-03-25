@@ -16,10 +16,16 @@ function addFavoriteEpisode(event) {
         },
         body: JSON.stringify(data)
     };
-    fetch('http://127.0.0.1:5000/api/add-favorite', option).then(location.reload()).then(notification)
+    fetch('http://127.0.0.1:5000/api/add-favorite', option).then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            // console.log(data);
+            notification(data)
+        });
 }
 
-function notification() {
-    alert('Episod to Favorite')
+function notification(data) {
+    alert(data)
 
 }
