@@ -42,8 +42,15 @@
                         Codecool Series DB
                     </span>
         <div id="header-auth">
-            <button type="button" id="bt_register">Register</button>
-            <button type="button" id="bt_login">Login</button>
+            {% if data_user %}
+                        <a href="{{ url_for('favourite_page') }}"><button type="button" id="bt_favorite">Favourite</button></a>
+                        <a href="{{ url_for('index') }}"><button type="button" id="bt_home">Home</button></a>
+
+                        <a href="{{ url_for('account_logout') }}"><button type="button" id="bt_logout">Logout</button></a>
+            {% else %}
+                        <a href="{{ url_for('account_register') }}"><button type="button" id="bt_register">Register</button></a>
+                        <a href="{{ url_for('account_login') }}"><button type="button" id="bt_login">Login</button></a>
+            {% endif %}
         </div>
     </header>
     <section>
@@ -73,7 +80,7 @@
                 <tbody>
                 {% for show in shows %}
                     <tr>
-                        <td><a href="{{ '/tv-show/' + (show['id'] | string) }}">{{ show['title'] }}</a></td>
+                        <td><a href="{{ '/tv-show/' + (show['id'] | string) + '/1'}}">{{ show['title'] }}</a></td>
                         <td>{{ show['year'] }}</td>
                         <td>{{ show['runtime'] }} {{ "minutes" }}</td>
                         <td>{{ show['first_value'] }}</td>

@@ -40,17 +40,23 @@
                     Codecool Series DB
                 </span>
         <div id="header-auth">
-            <button type="button" id="bt_register">Register</button>
-            <button type="button" id="bt_login">Login</button>
+            {% if data_user %}
+                        <a href="{{ url_for('favourite_page') }}"><button type="button" id="bt_favorite">Favourite</button></a>
+                        <a href="{{ url_for('index') }}"><button type="button" id="bt_home">Home</button></a>
+                        <a href="{{ url_for('account_logout') }}"><button type="button" id="bt_logout">Logout</button></a>
+            {% else %}
+                        <a href="{{ url_for('account_register') }}"><button type="button" id="bt_register">Register</button></a>
+                        <a href="{{ url_for('account_login') }}"><button type="button" id="bt_login">Login</button></a>
+            {% endif %}
         </div>
     </header>
     <section>
         <nav class="breadcrumb">
             <a href="{{ url_for('index') }}">Home</a>
             <span class="separator">&gt;</span>
-            <a href="#">Season 3</a>
+            <a href="#detailed-view">{{ data[0]['name'] }}</a>
             <span class="separator">&gt;</span>
-            <a href="#">Episode 8</a>
+            <a href="#season-card">{{ table[0]['season'] }}</a>
         </nav>
         <h1 class="title text-center">Welcome page</h1>
         <div class="card">
@@ -68,68 +74,33 @@
             <table>
                 <thead>
                 <tr>
-                    <th>a</th>
-                    <th>b</th>
-                    <th>c</th>
-                    <th>d</th>
+                    <th>Season</th>
+                    <th>Episod</th>
+                    <th>Title</th>
+                    <th>Length</th>
                     <th class="action-column">e</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>Lorem</td>
-                    <td>Ipsum</td>
-                    <td>Dolor</td>
-                    <td>Sit amet</td>
-                    <td class="action-column">
-                        <button type="button" class="icon-button"><i class="fa fa-edit fa-fw"></i></button>
-                        <button type="button" class="icon-button"><i class="fa fa-trash fa-fw"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Lorem</td>
-                    <td>Ipsum</td>
-                    <td>Dolor</td>
-                    <td>Sit amet</td>
-                    <td class="action-column">
-                        <button type="button" class="icon-button"><i class="fa fa-edit fa-fw"></i></button>
-                        <button type="button" class="icon-button"><i class="fa fa-trash fa-fw"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Lorem</td>
-                    <td>Ipsum</td>
-                    <td>Dolor</td>
-                    <td>Sit amet</td>
-                    <td class="action-column">
-                        <button type="button" class="icon-button"><i class="fa fa-edit fa-fw"></i></button>
-                        <button type="button" class="icon-button"><i class="fa fa-trash fa-fw"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Lorem</td>
-                    <td>Ipsum</td>
-                    <td>Dolor</td>
-                    <td>Sit amet</td>
-                    <td class="action-column">
-                        <button type="button" class="icon-button"><i class="fa fa-edit fa-fw"></i></button>
-                        <button type="button" class="icon-button"><i class="fa fa-trash fa-fw"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Lorem</td>
-                    <td>Ipsum</td>
-                    <td>Dolor</td>
-                    <td>Sit amet</td>
-                    <td class="action-column">
-                        <button type="button" class="icon-button"><i class="fa fa-edit fa-fw"></i></button>
-                        <button type="button" class="icon-button"><i class="fa fa-trash fa-fw"></i></button>
-                    </td>
-                </tr>
+                {% for elem in table %}
+                    <tr>
+                        <td>{{ elem['season'] }}</td>
+                        <td>{{ elem['episode'] }}</td>
+                        <td>{{ elem['title'] }}</td>
+                        <td>{{ elem['runtime'] }} minutes</td>
+                        <td class="action-column">
+                            {% if data_user %}
+                            <button type="button"  class="icon-button" name="favorites"><i class="fa fa-star" id="{{ elem['id'] }}" value="{{ data_user }}"></i></button>
+                            {% endif %}
+                            <a href="#form-tvshow"><button type="button" class="icon-button"><i class="fa fa-edit fa-fw"></i></button></a>
+                            <button type="button"  class="icon-button"><i class="fa fa-trash fa-fw"></i></button>
+                        </td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
-        <div class="card detailed-view">
+        <div class="card detailed-view" id="detailed-view">
             <p>And here is a "detailed" kind of view:</p>
             <div class="row">
                 <img src="/static/assets/codecool-logo.png" alt="{{ data[0]['title'] }} poster"
@@ -140,11 +111,7 @@
                     <p class="small grayed">{{ data[0]['runtime'] }} {{ 'minutes' }} <span class="separator">|</span>
                         {% set comma = joiner(",") %}
                         {% for dict_item in genres %}
-                            {% for key, value in dict_item.items() %}
-                                {% if key=='genres' %}
-                                    {{ comma() }}{{ value}}
-                                {% endif %}
-                            {% endfor %}
+                                    {{ comma() }}{{ dict_item['genres'] }}
                         {% endfor %}
 
                         <span class="separator">|</span> {{ data[0]['year'] }}</p>
@@ -156,12 +123,7 @@
                 <p><b>Writers:</b>&nbsp;<a href="#">N/A</a></p>
                 <p><b>Stars:</b>
                     {% for dict_item in actors %}
-                        {% for key, value in dict_item.items() %}
-                            {% if key == 'name' %}
-                                &nbsp;<a href="#">{{ value }}</a>
-
-                            {% endif %}
-                        {% endfor %}
+                        &nbsp;<a href="#">{{ dict_item['name'] }}</a>
                     {% endfor %}
                 </p>
             </div>
@@ -172,19 +134,15 @@
                         allowfullscreen></iframe>
             </div>
         {% endif %}
-        <div class="card">
+        <div class="card" id="season-card">
             <h1>Seasons Card</h1>
-            {% for dict_item in data %}
-                {% for key, value in dict_item.items() %}
-                    {% if key == 'title' %}
-                        <ul>{{ value }}</ul>
-                    {% endif %}
-                {% endfor %}
+            {% for dic_item in data %}
+                <ul>
+                    <a href="{{ '/tv-show/' + (dic_item['id'] | string) + '/' + (dic_item['season_number'] | string) }}"> {{ dic_item['title'] }}</a>
+                </ul>
             {% endfor %}
-
-
         </div>
-        <div class="card">
+        <div class="card" id="form-tvshow">
             <p>A form example to edit a TV show's episode:</p>
             <form action="#" method="post">
                 <p class="form-element">
@@ -228,6 +186,7 @@
     <div class="dark-blue-layer"></div>
     <div class="light-blue-layer"></div>
 </div>
+<script src="/static/javascript/js_show.js" type="text/javascript"></script>
 </body>
 
 </html>
